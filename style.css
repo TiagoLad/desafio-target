@@ -589,3 +589,27 @@ tbody tr:last-child td {
     }
 
 }
+
+.sem-estoque {
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    background-color: #fee2e2;
+
+    color: #dc2626;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+.estoque-zero {
+    background-color: #fee2e2;
+
+    color: #dc2626;
+
+    border-color: #fecaca;
+}
