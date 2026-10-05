@@ -4,32 +4,88 @@ let movimentacoes = [];
 
 async function carregarEstoque() {
 
-    const estoqueSalvo = localStorage.getItem("estoque");
+    try {
 
-    if (estoqueSalvo) {
+        const estoqueSalvo =
+            localStorage.getItem("estoque");
 
-        produtos = JSON.parse(estoqueSalvo);
 
-    } else {
+        if (estoqueSalvo) {
 
-        const resposta = await fetch("estoque.json");
-        const dados = await resposta.json();
+            produtos =
+                JSON.parse(estoqueSalvo);
 
-        produtos = dados.estoque;
+        } else {
 
-        salvarEstoque();
+            const resposta =
+                await fetch("estoque.json");
+
+
+            if (!resposta.ok) {
+
+                throw new Error(
+                    "Não foi possível carregar o arquivo estoque.json."
+                );
+
+            }
+
+
+            const dados =
+                await resposta.json();
+
+
+            if (
+                !dados.estoque ||
+                !Array.isArray(dados.estoque)
+            ) {
+
+                throw new Error(
+                    "Estrutura do arquivo estoque.json inválida."
+                );
+
+            }
+
+
+            produtos =
+                dados.estoque;
+
+
+            salvarEstoque();
+
+        }
+
+
+        const historicoSalvo =
+            localStorage.getItem("movimentacoes");
+
+
+        if (historicoSalvo) {
+
+            movimentacoes =
+                JSON.parse(historicoSalvo);
+
+        }
+
+
+        carregarProdutos();
+
+        exibirEstoque();
+
+        exibirHistorico();
+
+
+    } catch (erro) {
+
+        console.error(erro);
+
+
+        exibirMensagem(
+            "Erro ao carregar os dados de estoque.",
+            "erro"
+        );
 
     }
 
-    const historicoSalvo = localStorage.getItem("movimentacoes");
-
-    if (historicoSalvo) {
-        movimentacoes = JSON.parse(historicoSalvo);
-    }
-
-    carregarProdutos();
-    exibirEstoque();
-    exibirHistorico();
 }
 
 
@@ -55,16 +111,27 @@ function salvarMovimentacoes() {
 
 function carregarProdutos() {
 
-    const selectProduto = document.getElementById("produto");
+    const selectProduto =
+        document.getElementById("produto");
+
+
+    selectProduto.innerHTML =
+        '<option value="">Selecione um produto</option>';
+
 
     produtos.forEach((produto) => {
 
-        const option = document.createElement("option");
+        const option =
+            document.createElement("option");
 
-        option.value = produto.codigoProduto;
+
+        option.value =
+            produto.codigoProduto;
+
 
         option.textContent =
             `${produto.codigoProduto} - ${produto.descricaoProduto}`;
+
 
         selectProduto.appendChild(option);
 
@@ -76,26 +143,60 @@ function carregarProdutos() {
 function atualizarEstoqueAtual() {
 
     const codigoProduto =
-        Number(document.getElementById("produto").value);
+        Number(
+            document
+                .getElementById("produto")
+                .value
+        );
+
 
     const estoqueAtual =
         document.getElementById("estoqueAtual");
 
-    const produto = produtos.find(
-        (produto) => produto.codigoProduto === codigoProduto
-    );
+
+    const produto =
+        produtos.find(
+            (produto) =>
+                produto.codigoProduto === codigoProduto
+        );
+
 
     if (!produto) {
 
         estoqueAtual.textContent =
             "Selecione um produto";
 
+
+        estoqueAtual.className =
+            "estoque-atual";
+
+
         return;
 
     }
 
+
+    if (produto.estoque === 0) {
+
+        estoqueAtual.textContent =
+            "Produto sem estoque";
+
+
+        estoqueAtual.className =
+            "estoque-atual estoque-zero";
+
+
+        return;
+
+    }
+
+
     estoqueAtual.textContent =
         `${produto.estoque} unidades`;
+
+
+    estoqueAtual.className =
+        "estoque-atual";
 
 }
 
@@ -103,14 +204,37 @@ function atualizarEstoqueAtual() {
 function gerarIdMovimentacao() {
 
     if (movimentacoes.length === 0) {
+
         return 1;
+
     }
 
-    const maiorId = Math.max(
-        ...movimentacoes.map(movimentacao => movimentacao.id)
-    );
+
+    const idsNumericos =
+        movimentacoes
+            .map(
+                (movimentacao) =>
+                    Number(movimentacao.id)
+            )
+            .filter(
+                (id) =>
+                    !isNaN(id)
+            );
+
+
+    if (idsNumericos.length === 0) {
+
+        return 1;
+
+    }
+
+
+    const maiorId =
+        Math.max(...idsNumericos);
+
 
     return maiorId + 1;
+
 }
 
 
@@ -118,22 +242,57 @@ function registrarMovimentacao(event) {
 
     event.preventDefault();
 
+
     const codigoProduto =
-        Number(document.getElementById("produto").value);
+        Number(
+            document
+                .getElementById("produto")
+                .value
+        );
+
 
     const tipo =
-        document.getElementById("tipo").value;
+        document
+            .getElementById("tipo")
+            .value;
+
 
     const quantidade =
-        Number(document.getElementById("quantidade").value);
+        Number(
+            document
+                .getElementById("quantidade")
+                .value
+        );
+
 
     const descricao =
-        document.getElementById("descricao").value.trim();
+        document
+            .getElementById("descricao")
+            .value
+            .trim();
 
 
-    const produto = produtos.find(
-        (produto) => produto.codigoProduto === codigoProduto
-    );
+    // =========================
+    // VALIDAÇÃO DO PRODUTO
+    // =========================
+
+    if (!codigoProduto) {
+
+        exibirMensagem(
+            "Selecione um produto.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    const produto =
+        produtos.find(
+            (produto) =>
+                produto.codigoProduto === codigoProduto
+        );
 
 
     if (!produto) {
@@ -148,10 +307,17 @@ function registrarMovimentacao(event) {
     }
 
 
-    if (quantidade <= 0) {
+    // =========================
+    // VALIDAÇÃO DO TIPO
+    // =========================
+
+    if (
+        tipo !== "entrada" &&
+        tipo !== "saida"
+    ) {
 
         exibirMensagem(
-            "A quantidade deve ser maior que zero.",
+            "Selecione o tipo da movimentação.",
             "erro"
         );
 
@@ -160,10 +326,17 @@ function registrarMovimentacao(event) {
     }
 
 
-    if (tipo === "saida" && quantidade > produto.estoque) {
+    // =========================
+    // VALIDAÇÃO DA QUANTIDADE
+    // =========================
+
+    if (
+        isNaN(quantidade) ||
+        quantidade <= 0
+    ) {
 
         exibirMensagem(
-            "Não há estoque suficiente para realizar esta saída.",
+            "Informe uma quantidade maior que zero.",
             "erro"
         );
 
@@ -171,12 +344,76 @@ function registrarMovimentacao(event) {
 
     }
 
+
+    if (!Number.isInteger(quantidade)) {
+
+        exibirMensagem(
+            "A quantidade deve ser um número inteiro.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    // =========================
+    // VALIDAÇÃO DA DESCRIÇÃO
+    // =========================
+
+    if (descricao === "") {
+
+        exibirMensagem(
+            "Informe uma descrição para a movimentação.",
+            "erro"
+        );
+
+        return;
+
+    }
+
+
+    // =========================
+    // VALIDAÇÕES DE SAÍDA
+    // =========================
+
+    if (tipo === "saida") {
+
+        if (produto.estoque === 0) {
+
+            exibirMensagem(
+                `O produto "${produto.descricaoProduto}" está sem estoque.`,
+                "erro"
+            );
+
+            return;
+
+        }
+
+
+        if (quantidade > produto.estoque) {
+
+            exibirMensagem(
+                `Estoque insuficiente. Estoque disponível: ${produto.estoque} unidades.`,
+                "erro"
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    // =========================
+    // REALIZA MOVIMENTAÇÃO
+    // =========================
 
     if (tipo === "entrada") {
 
         produto.estoque += quantidade;
 
-    } else if (tipo === "saida") {
+    } else {
 
         produto.estoque -= quantidade;
 
@@ -185,7 +422,8 @@ function registrarMovimentacao(event) {
 
     const movimentacao = {
 
-        id: gerarIdMovimentacao(),
+        id:
+            gerarIdMovimentacao(),
 
         codigoProduto:
             produto.codigoProduto,
@@ -206,34 +444,100 @@ function registrarMovimentacao(event) {
             produto.estoque,
 
         data:
-            new Date().toLocaleString("pt-BR")
+            new Date()
+                .toLocaleString("pt-BR")
 
     };
 
 
-    movimentacoes.push(movimentacao);
-
-    salvarEstoque();
-    salvarMovimentacoes();
-
-    exibirEstoque();
-    exibirHistorico();
-    atualizarEstoqueAtual();
-
-
-    exibirMensagem(
-        `Movimentação realizada com sucesso. Estoque final: ${produto.estoque} unidades.`,
-        "sucesso"
+    movimentacoes.push(
+        movimentacao
     );
 
 
+    salvarEstoque();
+
+    salvarMovimentacoes();
+
+
+    exibirEstoque();
+
+    exibirHistorico();
+
+
+    // =========================
+    // MENSAGEM DE RETORNO
+    // =========================
+
+    if (
+        tipo === "saida" &&
+        produto.estoque === 0
+    ) {
+
+        exibirMensagem(
+            `Movimentação realizada com sucesso. O produto "${produto.descricaoProduto}" agora está sem estoque.`,
+            "sucesso"
+        );
+
+    } else {
+
+        exibirMensagem(
+            `Movimentação realizada com sucesso. Estoque final: ${produto.estoque} unidades.`,
+            "sucesso"
+        );
+
+    }
+
+
+    // Limpa todos os campos após o registro
+    limparFormulario();
+
+}
+
+
+function limparFormulario() {
+
+    const formulario =
+        document.getElementById(
+            "formMovimentacao"
+        );
+
+
+    formulario.reset();
+
+
     document
-        .getElementById("formMovimentacao")
-        .reset();
+        .getElementById("produto")
+        .value = "";
 
 
-    document.getElementById("estoqueAtual")
-        .textContent = "Selecione um produto";
+    document
+        .getElementById("tipo")
+        .value = "";
+
+
+    document
+        .getElementById("quantidade")
+        .value = "";
+
+
+    document
+        .getElementById("descricao")
+        .value = "";
+
+
+    const estoqueAtual =
+        document.getElementById(
+            "estoqueAtual"
+        );
+
+
+    estoqueAtual.textContent =
+        "Selecione um produto";
+
+
+    estoqueAtual.className =
+        "estoque-atual";
 
 }
 
@@ -241,26 +545,40 @@ function registrarMovimentacao(event) {
 function exibirEstoque() {
 
     const tabela =
-        document.getElementById("tabelaEstoque");
+        document.getElementById(
+            "tabelaEstoque"
+        );
+
 
     tabela.innerHTML = "";
+
 
     produtos.forEach((produto) => {
 
         const linha =
             document.createElement("tr");
 
+
+        const situacaoEstoque =
+            produto.estoque === 0
+                ? `<span class="sem-estoque">Sem estoque</span>`
+                : `${produto.estoque} unidades`;
+
+
         linha.innerHTML = `
-            <td>${produto.codigoProduto}</td>
+            <td>
+                ${produto.codigoProduto}
+            </td>
 
             <td>
                 ${produto.descricaoProduto}
             </td>
 
             <td>
-                ${produto.estoque}
+                ${situacaoEstoque}
             </td>
         `;
+
 
         tabela.appendChild(linha);
 
@@ -272,9 +590,28 @@ function exibirEstoque() {
 function exibirHistorico() {
 
     const tabela =
-        document.getElementById("historicoMovimentacoes");
+        document.getElementById(
+            "historicoMovimentacoes"
+        );
+
 
     tabela.innerHTML = "";
+
+
+    if (movimentacoes.length === 0) {
+
+        tabela.innerHTML = `
+            <tr>
+                <td colspan="7">
+                    Nenhuma movimentação registrada.
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
 
     movimentacoes
         .slice()
@@ -284,35 +621,43 @@ function exibirHistorico() {
             const linha =
                 document.createElement("tr");
 
-                linha.innerHTML = `
+
+            const tipoFormatado =
+                movimentacao.tipo === "entrada"
+                    ? "Entrada"
+                    : "Saída";
+
+
+            linha.innerHTML = `
                 <td>
-                  ${movimentacao.id}
+                    ${movimentacao.id}
                 </td>
 
                 <td>
-                  ${movimentacao.codigoProduto}
+                    ${movimentacao.codigoProduto}
                 </td>
 
                 <td>
-                  ${movimentacao.produto}
+                    ${movimentacao.produto}
                 </td>
 
                 <td>
-                ${movimentacao.tipo}
+                    ${tipoFormatado}
                 </td>
 
                 <td>
-                ${movimentacao.quantidade}
+                    ${movimentacao.quantidade}
                 </td>
 
                 <td>
-                ${movimentacao.descricao}
+                    ${movimentacao.descricao}
                 </td>
 
-               <td>
-               ${movimentacao.estoqueFinal}
-               </td>
+                <td>
+                    ${movimentacao.estoqueFinal}
+                </td>
             `;
+
 
             tabela.appendChild(linha);
 
@@ -324,11 +669,17 @@ function exibirHistorico() {
 function exibirMensagem(texto, tipo) {
 
     const mensagem =
-        document.getElementById("mensagem");
+        document.getElementById(
+            "mensagem"
+        );
 
-    mensagem.textContent = texto;
 
-    mensagem.className = tipo;
+    mensagem.textContent =
+        texto;
+
+
+    mensagem.className =
+        tipo;
 
 }
 
@@ -342,7 +693,9 @@ document
 
 
 document
-    .getElementById("formMovimentacao")
+    .getElementById(
+        "formMovimentacao"
+    )
     .addEventListener(
         "submit",
         registrarMovimentacao
