@@ -1,0 +1,591 @@
+/* =========================
+   RESET E CONFIGURAÇÕES
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --cor-primaria: #2563eb;
+    --cor-primaria-hover: #1d4ed8;
+
+    --cor-secundaria: #0f172a;
+    --cor-texto: #334155;
+    --cor-texto-suave: #64748b;
+
+    --cor-fundo: #f1f5f9;
+    --cor-card: #ffffff;
+    --cor-borda: #e2e8f0;
+
+    --cor-sucesso: #16a34a;
+    --cor-sucesso-fundo: #dcfce7;
+
+    --cor-erro: #dc2626;
+    --cor-erro-fundo: #fee2e2;
+
+    --sombra:
+        0 10px 30px rgba(15, 23, 42, 0.08);
+
+    --raio: 16px;
+}
+
+
+body {
+    min-height: 100vh;
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8fafc 0%,
+            #eef2ff 100%
+        );
+
+    color: var(--cor-texto);
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+    width: 92%;
+    max-width: 1180px;
+
+    margin: 0 auto;
+    padding: 50px 0;
+}
+
+
+/* =========================
+   CABEÇALHOS
+========================= */
+
+header {
+    margin-bottom: 32px;
+}
+
+header h1 {
+    margin-bottom: 8px;
+
+    color: var(--cor-secundaria);
+
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+header p {
+    color: var(--cor-texto-suave);
+
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+
+/* =========================
+   BOTÃO VOLTAR
+========================= */
+
+.voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    margin-bottom: 24px;
+
+    color: var(--cor-primaria);
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    transition: 0.2s ease;
+}
+
+.voltar:hover {
+    color: var(--cor-primaria-hover);
+
+    transform: translateX(-3px);
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+    margin-bottom: 28px;
+
+    padding: 28px;
+
+    background: var(--cor-card);
+
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio);
+
+    box-shadow: var(--sombra);
+}
+
+.card h2 {
+    margin-bottom: 22px;
+
+    color: var(--cor-secundaria);
+
+    font-size: 21px;
+}
+
+
+/* =========================
+   FORMULÁRIOS
+========================= */
+
+.campo {
+    margin-bottom: 20px;
+}
+
+.campo label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: var(--cor-secundaria);
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+input,
+select {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    background: #ffffff;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+
+    color: var(--cor-texto);
+
+    font-size: 15px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--cor-primaria);
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+
+/* =========================
+   BOTÕES
+========================= */
+
+button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 13px 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #1d4ed8
+        );
+
+    border: none;
+    border-radius: 10px;
+
+    color: white;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 6px 16px rgba(37, 99, 235, 0.2);
+
+    transition: 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(37, 99, 235, 0.28);
+}
+
+
+/* =========================
+   TABELAS
+========================= */
+
+.tabela-container {
+    width: 100%;
+
+    overflow-x: auto;
+
+    border-radius: 12px;
+}
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background-color: #ffffff;
+}
+
+thead {
+    background-color: #f1f5f9;
+}
+
+th {
+    padding: 15px;
+
+    color: #475569;
+
+    text-align: left;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+td {
+    padding: 15px;
+
+    border-bottom: 1px solid #e2e8f0;
+
+    font-size: 14px;
+}
+
+tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================
+   ESTOQUE
+========================= */
+
+.estoque-atual {
+    padding: 14px;
+
+    background-color: #f8fafc;
+
+    border: 1px solid var(--cor-borda);
+    border-radius: 10px;
+
+    color: var(--cor-secundaria);
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+
+/* =========================
+   MENSAGENS
+========================= */
+
+.sucesso,
+.erro {
+    margin-top: 20px;
+
+    padding: 14px 16px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.sucesso {
+    background: var(--cor-sucesso-fundo);
+    color: var(--cor-sucesso);
+}
+
+.erro {
+    background: var(--cor-erro-fundo);
+    color: var(--cor-erro);
+}
+
+
+/* =========================
+   RESULTADO JUROS
+========================= */
+
+.resultado-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+
+    padding: 15px 0;
+
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+.resultado-item:last-child {
+    border-bottom: none;
+
+    color: var(--cor-primaria);
+
+    font-size: 18px;
+}
+
+
+/* =========================
+   INDEX - HOME
+========================= */
+
+.home-header {
+    max-width: 700px;
+
+    margin: 20px auto 45px;
+
+    text-align: center;
+}
+
+.home-header .tag {
+    display: inline-block;
+
+    margin-bottom: 14px;
+
+    padding: 7px 13px;
+
+    background: #dbeafe;
+
+    border-radius: 999px;
+
+    color: var(--cor-primaria);
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.home-header h1 {
+    margin-bottom: 12px;
+
+    font-size: 40px;
+}
+
+.home-header p {
+    font-size: 17px;
+}
+
+
+/* =========================
+   CARDS DA HOME
+========================= */
+
+.cards {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 24px;
+}
+
+.card-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.menu-card {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    min-height: 285px;
+
+    padding: 30px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #ffffff 0%,
+            #f8fafc 100%
+        );
+
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio);
+
+    box-shadow: var(--sombra);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.menu-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 4px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #2563eb,
+            #60a5fa
+        );
+}
+
+.menu-card:hover {
+    transform: translateY(-7px);
+
+    border-color: #93c5fd;
+
+    box-shadow:
+        0 20px 35px rgba(15, 23, 42, 0.12);
+}
+
+.card-numero {
+    display: inline-flex;
+
+    width: fit-content;
+
+    margin-bottom: 22px;
+
+    padding: 8px 12px;
+
+    background: #eff6ff;
+
+    border-radius: 8px;
+
+    color: var(--cor-primaria);
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.menu-card h2 {
+    margin-bottom: 14px;
+
+    color: var(--cor-secundaria);
+
+    font-size: 22px;
+}
+
+.menu-card p {
+    margin-bottom: 28px;
+
+    color: var(--cor-texto-suave);
+
+    line-height: 1.7;
+
+    flex-grow: 1;
+}
+
+.card-acao {
+    color: var(--cor-primaria);
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+
+/* =========================
+   RODAPÉ
+========================= */
+
+.footer {
+    margin-top: 45px;
+
+    color: var(--cor-texto-suave);
+
+    text-align: center;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+@media (max-width: 900px) {
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .menu-card {
+        min-height: auto;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .container {
+        width: 94%;
+
+        padding: 28px 0;
+    }
+
+    header h1,
+    .home-header h1 {
+        font-size: 28px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .resultado-item {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    th,
+    td {
+        padding: 12px;
+
+        font-size: 13px;
+    }
+
+}

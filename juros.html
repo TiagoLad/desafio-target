@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cálculo de Juros</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+
+    <main class="container">
+
+        <a href="index.html" class="voltar">
+            ← Voltar para início
+        </a>
+
+        <header>
+
+            <h1>
+                Cálculo de Juros
+            </h1>
+
+            <p>
+                Calcule automaticamente os juros
+                considerando a data de vencimento.
+            </p>
+
+        </header>
+
+        <section class="card">
+
+            <h2>
+                Dados para cálculo
+            </h2>
+
+            <form id="formJuros">
+
+                <div class="campo">
+                    <label for="valor">Valor</label>
+
+                    <input type="text" id="valor" placeholder="R$ 0,00" inputmode="numeric" required>
+                </div>
+
+                <div class="campo">
+                    <label for="vencimento">Data de vencimento</label>
+
+                    <input type="date" id="vencimento" required>
+                </div>
+
+                <button type="submit">
+                    Calcular juros
+                </button>
+
+            </form>
+
+        </section>
+
+        <section class="card" id="resultadoJuros" style="display: none;">
+
+            <h2>
+                Resultado
+            </h2>
+
+            <div class="resultado-item">
+                <strong>Valor original:</strong>
+                <span id="valorOriginal"></span>
+            </div>
+
+            <div class="resultado-item">
+                <strong>Data de vencimento:</strong>
+                <span id="dataVencimento"></span>
+            </div>
+
+            <div class="resultado-item">
+                <strong>Dias em atraso:</strong>
+                <span id="diasAtraso"></span>
+            </div>
+
+            <div class="resultado-item">
+                <strong>Juros:</strong>
+                <span id="valorJuros"></span>
+            </div>
+
+            <div class="resultado-item">
+                <strong>Valor atualizado:</strong>
+                <span id="valorAtualizado"></span>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="juros.js"></script>
+
+</body>
+
+</html>
